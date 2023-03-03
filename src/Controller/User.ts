@@ -1,6 +1,7 @@
 import { createUsername } from '../helpers/formater';
 import {Request, Response} from 'express';
 import MUser, {IUser, Role} from "../Model/MUser";
+import Auth from "./Auth";
 import _ from "lodash"
 import { StatusCodes } from 'http-status-codes';
 
@@ -13,8 +14,10 @@ class User {
         try{
 
             const user = new MUser({...req.body})
-            await user.save()
-            
+
+                await user.save()
+
+
             res.json({data: user});
         }catch(err){
             console.error(`Error creating user ${err}`)
@@ -70,6 +73,23 @@ class User {
         }
 
     }
+
+    createArtist = async (req: Request, res: Response) => {
+        try{
+
+            const user = new MUser({...req.body, role:Role.artist})
+
+            await user.save()
+
+
+            res.json({data: user});
+        }catch(err){
+            console.error(`Error creating user ${err}`)
+            res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`)
+
+        }
+    }
+
 }
 
 const user = new User();

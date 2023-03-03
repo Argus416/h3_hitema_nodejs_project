@@ -23,6 +23,16 @@ export const isAdmin = (req: Request,res: Response,next: NextFunction) =>{
     }
 }
 
+export const uniqueAdmin = (req: Request,res: Response,next: NextFunction) =>{
+    const result = req.body.role === Role.admin
+    if(result){
+        res.status(StatusCodes.UNAUTHORIZED).send("Only one admin is allowed")
+    }
+    else{
+        next()
+    }
+}
+
 
 export const isArtist = (req: Request,res: Response,next: NextFunction) =>{
     const result =Auth.currentUser?.role === Role.artist
@@ -34,7 +44,7 @@ export const isArtist = (req: Request,res: Response,next: NextFunction) =>{
 }
 
 
-export const isManger = (req: Request,res: Response,next: NextFunction) =>{
+export const isManager = (req: Request,res: Response,next: NextFunction) =>{
     const result =Auth.currentUser?.role === Role.manager
     if(result)
         next()
