@@ -69,6 +69,23 @@ class User {
 			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);
 		}
 	};
+
+	banUser = async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+			const user = await MUser.updateOne(
+				{ _id: id },
+				{
+					banned: true,
+				}
+			);
+
+			res.json(user);
+		} catch (err) {
+			console.error(`Error updating user ${err}`);
+			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);
+		}
+	};
 }
 
 const user = new User();

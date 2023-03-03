@@ -23,6 +23,15 @@ export const isAdmin = (req: Request,res: Response,next: NextFunction) =>{
     }
 }
 
+export const isNotAdmin = (req: Request, res: Response, next: NextFunction) => {
+	const result = Auth.currentUser?.role === Role.admin;
+	if (result) {
+		res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
+	} else {
+		next();
+	}
+};
+
 
 export const isArtist = (req: Request,res: Response,next: NextFunction) =>{
     const result =Auth.currentUser?.role === Role.artist

@@ -18,7 +18,7 @@ export enum Role {
 
 // Admin can 
     // CRD all models
-    // ban artist
+    // banned artist
 
 // Manager can
     // read all models
@@ -32,13 +32,20 @@ const UserSchema = new Schema(
 	{
 		lastname: String,
 		firstname: String,
-		email: String,
+		email: {
+			type: String,
+			unique: true,
+		},
 		username: {
 			type: String,
 			unique: true,
 		},
 		password: String,
 		role: String,
+		banned: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,

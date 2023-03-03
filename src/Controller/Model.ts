@@ -1,15 +1,13 @@
 import {Request, Response} from 'express';
 import _ from "lodash"
-import MModel from '../Model/MModel';
+import MModel, { IModel } from "../Model/MModel";
 
-import {
-	ReasonPhrases,
-	StatusCodes,
-} from 'http-status-codes';
-
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import Auth from "./Auth";
+import { Role } from "../Model/MUser";
 
 class Model {
-	models: Array<any> = [];
+	models: Array<IModel> = [];
 
 	createModel = async (req: Request, res: Response) => {
 		try {
@@ -22,9 +20,20 @@ class Model {
 		}
 	};
 
-	getAllModels = async (req: Request, res: Response) => {
+	getModels = async (req: Request, res: Response) => {
 		try {
-			const models = await MModel.find();
+			let models: IModel[] = [];
+
+			if (Auth.currentUser?.role === Role.admin || Auth.currentUser?.role === Role.manager) {
+				models = await MModel.find();
+			}
+
+			if (Auth.currentUser?.role === Role.artist) {
+				models = await MModel.find({
+					artistId: Auth.currentUser._id,
+				});
+			}
+
 			res.json({ data: models });
 		} catch (err) {
 			console.error(`Error fetching models ${err}`);
@@ -49,14 +58,15 @@ class Model {
 		}
 	};
 
-	/*
-        On met à jour un utilisateur de la liste des utilisateurs (this.models) en fonction de son id
-     */
 	updateModel = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
 			const model = await MModel.updateOne(
-				{ _id: id },
+				{
+					_id: id,
+					artistId: Auth.currentUser._id,
+					banned: false,
+				},
 				{
 					...req.body,
 				}
@@ -66,6 +76,30 @@ class Model {
 		} catch (err) {
 			console.error(`Error updating model ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error updating model ${err}`);
+		}
+	};
+
+	addApproval = async (req: Request, res: Response) => {
+		try {
+			const { idModel } = req.params;
+			const model = await MModel.updateOne(
+				{
+					_id: idModel,
+					banned: false,
+				},
+				{
+					$push: {
+						approvals: {
+							...req.body,
+						},
+					},
+				}
+			);
+
+			res.json(model);
+		} catch (err) {
+			console.error(`Error approving model ${err}`);
+			res.status(StatusCodes.UNAUTHORIZED).send(`Error approving model ${err}`);
 		}
 	};
 }
