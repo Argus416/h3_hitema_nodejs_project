@@ -3,7 +3,6 @@ import { isAdmin } from "../middleware/checkAuth";
 import express from "express";
 import User from "../Controller/User";
 import Model from "../Controller/Model";
-import Approval from "../Controller/Approval";
 import Auth from "../Controller/Auth";
 // import authenticate from '../middleware/authenticate';
 
@@ -23,6 +22,6 @@ router.patch("/user/:id", User.updateUser);
 router.get("/models", Model.getModels);
 router.post("/model/new", isNotAdmin, Model.createModel);
 
-router.post("/approval/:idModel", isNotAdmin, Model.createModel);
+router.post("/model/approve/:idModel", isManger, Model.addApproval);
 
 export default router;
