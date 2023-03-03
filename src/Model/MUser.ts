@@ -28,18 +28,21 @@ export enum Role {
     // read for his own account, update all models
 
 
-const UserSchema = new Schema({
-    lastname: String,
-    firstname: String,
-    email : String,
-    username : {
-        type: String, 
-        unique: true
-    },
-    password: String,
-    role: String,
-}, {
-    timestamps: true,
-});
+const UserSchema = new Schema(
+	{
+		lastname: String,
+		firstname: String,
+		email: String,
+		username: {
+			type: String,
+			unique: true,
+		},
+		password: String,
+		role: String,
+	},
+	{
+		timestamps: true,
+	}
+);
 
 export default mongoose.model<IUser>('User', UserSchema);

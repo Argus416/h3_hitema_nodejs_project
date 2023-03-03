@@ -5,7 +5,7 @@ import _ from "lodash"
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
 
 export const isConnected = (req: Request,res: Response,next: NextFunction) =>{
-    const connected = _.isEmpty(Auth.currentUser)    
+    const connected = _.isEmpty(Auth.currentUser);    
     if(connected){
         next()
     }else{

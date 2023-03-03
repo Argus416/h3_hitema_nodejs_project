@@ -7,8 +7,8 @@ const RUN_APP = () =>{
     connectDatabase()
 
     app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
+		console.log(`Server is running on port ${port}`);
+	});
 }
 
 export default RUN_APP

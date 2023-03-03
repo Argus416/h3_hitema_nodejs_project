@@ -7,28 +7,28 @@ import jwt from 'jsonwebtoken';
 
 
 
-class Auth{
+class Auth {
+	currentUser = {} as any;
 
-    currentUser = {} as any
+	public login = async (req: Request, res: Response) => {
+		const { lastname, password } = req.body;
+		this.currentUser = await MUser.findOne({
+			lastname,
+			password,
+		});
 
-        public login = async  (req: Request, res: Response) => {
-        const { lastname, password } = req.body
-        this.currentUser = await MUser.findOne({
-            lastname , password
-        })
-        
-        if(this.currentUser){
-            const token = jwt.sign({ id: this.currentUser.id }, JWT_SECRET, { expiresIn: '1h' });
-            res.json({text: "User connected", token})
-        }else{
-            res.json({text: "User not found"})
-        }
-    }
-    
-    public logout = (req: Request, res: Response) => {
-        this.currentUser = {} as IUser
-        res.json({text: "User disconnected"})
-    }
+		if (this.currentUser) {
+			const token = jwt.sign({ id: this.currentUser.id }, JWT_SECRET, { expiresIn: "1h" });
+			res.json({ text: "User connected", token });
+		} else {
+			res.json({ text: "User not found" });
+		}
+	};
+
+	public logout = (req: Request, res: Response) => {
+		this.currentUser = {} as IUser;
+		res.json({ text: "User disconnected" });
+	};
 }
 
 const auth = new Auth()
