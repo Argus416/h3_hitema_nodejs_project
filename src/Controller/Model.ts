@@ -68,11 +68,35 @@ class Model {
 					},
 				},
 				{
+					$lookup: {
+						from: "users",
+						localField: "artistId",
+						foreignField: "_id",
+						as: "artist",
+					},
+				},
+				{
+					$unwind: {
+						path: "$artist",
+					},
+				},
+				{
 					$group: {
 						_id: "$_id",
 						artistId: { $first: "$artistId" },
 						name: { $first: "$name" },
 						slug: { $first: "$slug" },
+						artist: {
+							$first: {
+								_id: "$artist._id",
+								username: "$artist.username",
+								firstname: "$artist.firstname",
+								lastname: "$artist.lastname",
+								role: "$artist.role",
+								createdAt: "$artist.createdAt",
+								updatedAt: "$artist.updatedAt",
+							},
+						},
 						approvals: {
 							$push: {
 								userId: "$all_users_approvals._id",
@@ -94,6 +118,7 @@ class Model {
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error fetching models ${err}`);
 		}
 	};
+
 	deleteModel = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -132,6 +157,7 @@ class Model {
 	addApproval = async (req: Request, res: Response) => {
 		try {
 			const { idModel } = req.params;
+
 			const model = await MModel.updateOne(
 				{
 					_id: idModel,

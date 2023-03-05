@@ -24,7 +24,7 @@ const ModelSchema = new Schema(
 			unique: true,
 		},
 		// check if we can relate to a user
-		artistId: String,
+		artistId: Schema.Types.ObjectId,
 		approvals: [
 			{
 				userId: Schema.Types.ObjectId,
