@@ -16,3 +16,5 @@
 
 # Default accounts 
 - admin : admin@localhost.com
+- manager : manager{1-10}@localhost.com
+- artist : artist{1-10}@localhost.com
