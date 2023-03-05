@@ -20,6 +20,7 @@ router.patch("/user/:id", User.updateUser);
 router.delete("/user/:id", isAdmin, User.deleteUser);
 
 router.get("/models", Model.getModels);
+router.get("/model/:slug", Model.getModel);
 router.post("/model/new", isNotAdmin, Model.createModel);
 
 router.post("/model/approve/:idModel", isManager, Model.addApproval);

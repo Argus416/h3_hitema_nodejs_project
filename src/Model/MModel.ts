@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 export interface Approvals {
 	userId: string;
-	approuved: boolean;
+	approved: boolean;
 	created_at: Date;
 }
 
@@ -28,7 +28,7 @@ const ModelSchema = new Schema(
 		approvals: [
 			{
 				userId: Schema.Types.ObjectId,
-				approuved: Boolean,
+				approved: Boolean,
 				created_at: Date,
 			},
 		],

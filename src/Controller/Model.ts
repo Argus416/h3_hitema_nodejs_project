@@ -1,10 +1,10 @@
-import {Request, Response} from 'express';
-import _ from "lodash"
+import { Request, Response } from "express";
+import _ from "lodash";
 import MModel, { IModel } from "../model/MModel";
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Auth from "./Auth";
-import { Role } from "../model/MUser";
+import MUser, { Role } from "../model/MUser";
 
 class Model {
 	models: Array<IModel> = [];
@@ -41,9 +41,59 @@ class Model {
 		}
 	};
 
-	/*
-       On supprime un utilisateur de la liste des utilisateurs (this.models) en fonction de son id
-     */
+	getModel = async (req: Request, res: Response) => {
+		try {
+			let models = await MModel.aggregate([
+				{
+					$match: {
+						slug: req.params.slug,
+					},
+				},
+				{
+					$unwind: {
+						path: "$approvals",
+					},
+				},
+				{
+					$lookup: {
+						from: "users",
+						localField: "approvals.userId",
+						foreignField: "_id",
+						as: "all_users_approvals",
+					},
+				},
+				{
+					$unwind: {
+						path: "$all_users_approvals",
+					},
+				},
+				{
+					$group: {
+						_id: "$_id",
+						artistId: { $first: "$artistId" },
+						name: { $first: "$name" },
+						slug: { $first: "$slug" },
+						approvals: {
+							$push: {
+								userId: "$all_users_approvals._id",
+								username: "$all_users_approvals.username",
+								firstname: "$all_users_approvals.firstname",
+								lastname: "$all_users_approvals.lastname",
+								approved: "$approvals.approved",
+							},
+						},
+					},
+				},
+			]);
+
+			const nbManager = await MUser.find({ role: Role.manager, banned: false }).countDocuments();
+
+			res.json({ models: models, nbManager: nbManager });
+		} catch (err) {
+			console.error(`Error fetching models ${err}`);
+			res.status(StatusCodes.UNAUTHORIZED).send(`Error fetching models ${err}`);
+		}
+	};
 	deleteModel = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
