@@ -1,4 +1,10 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
+
+export interface Approvals {
+	userId: string;
+	approuved: boolean;
+	created_at: Date;
+}
 
 export interface IModel {
 	id?: string;
@@ -6,6 +12,7 @@ export interface IModel {
 	name: string;
 	slug: string;
 	artistId: string;
+	approvals: Approvals[];
 }
 
 const ModelSchema = new Schema(
