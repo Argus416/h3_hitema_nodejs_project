@@ -24,7 +24,7 @@ class User {
 				_id: id,
 			});
 
-			res.json({ user });
+			res.status(StatusCodes.OK).send("User deleted");
 		} catch (err) {
 			console.error(`Error deleting user ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error deleting user ${err}`);
@@ -46,7 +46,7 @@ class User {
 				}
 			);
 
-			res.json(user);
+			res.status(StatusCodes.OK).json("User updated");
 		} catch (err) {
 			console.error(`Error updating user ${err}`);
 			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);
@@ -71,7 +71,7 @@ class User {
 			const response = _.cloneDeep(req.body);
 			delete response.password;
 
-			res.json({ data: response });
+			res.status(StatusCodes.OK).send("User created");
 		} catch (err) {
 			console.error(`Error creating user ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
@@ -92,7 +92,7 @@ class User {
 
 			res.json({ data: response });
 		} catch (err) {
-			console.error(`Error creating user ${err}`);
+			res.status(StatusCodes.OK).send("Manager created");
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
 		}
 	};
@@ -115,7 +115,7 @@ class User {
 				}
 			);
 
-			res.status(StatusCodes.OK).json({ data: userAfterUpdate });
+			res.status(StatusCodes.OK).json("User banned");
 		} catch (err) {
 			console.error(`Error updating user ${err}`);
 			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);

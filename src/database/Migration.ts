@@ -8,11 +8,12 @@ import _ from "lodash";
 
 async function createUser(nb: number, role: Role) {
 	for await (const index of _.range(1, nb + 1)) {
+		const prefix = `${role}${index === 1 ? "" : index}`;
 		const user = new MUser({
-			email: faker.internet.email(),
+			email: `${prefix}@localhost.com`,
 			lastname: faker.name.lastName(),
 			firstname: faker.name.firstName(),
-			username: `${role}${index === 1 ? "" : index}`,
+			username: prefix,
 			password: await hashPassword("123321"),
 			role: role,
 		});
