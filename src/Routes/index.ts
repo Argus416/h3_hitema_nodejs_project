@@ -1,4 +1,4 @@
-import { isManger, isConnected, isArtist,uniqueAdmin, isNotAdmin } from "../middleware/checkAuth";
+import { isManager, isConnected, isArtist, uniqueAdmin, isNotAdmin } from "../middleware/checkAuth";
 import { isAdmin } from "../middleware/checkAuth";
 import express from "express";
 import User from "../Controller/User";
@@ -8,9 +8,8 @@ import Auth from "../Controller/Auth";
 
 const router = express.Router();
 
-
-router.post("/login" , Auth.login);
-router.post("/register" , User.createArtist);
+router.post("/login", Auth.login);
+router.post("/register", User.createArtist);
 
 router.patch("/logout", Auth.logout);
 
@@ -23,6 +22,6 @@ router.patch("/user/:id", User.updateUser);
 router.get("/models", Model.getModels);
 router.post("/model/new", isNotAdmin, Model.createModel);
 
-router.post("/model/approve/:idModel", isManger, Model.addApproval);
+router.post("/model/approve/:idModel", isManager, Model.addApproval);
 
 export default router;
