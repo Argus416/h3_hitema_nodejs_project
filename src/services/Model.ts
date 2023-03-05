@@ -3,6 +3,49 @@ import MModel, { IModel } from "../model/MModel";
 import MUser from "../model/MUser";
 import { isDocumentValid } from "../helpers/methods";
 
+
+// {
+// 	"_id" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"artistId" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"approvals" : [
+// 		{
+// 			"userId" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 			"approved" : true,
+// 			"comment" : "ok"
+// 		},	
+// 		{
+// 			"userId" : ObjectId("5f9f1b1b1b1b1b1b1b13b1b1b"),
+// 			"approved" : true,
+// 			"comment" : "ok"
+// 		},	
+// 	]
+// }
+
+
+// {
+// 	"_id" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"artistId" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"approvals" : 
+		
+// 		{
+// 			"userId" : ObjectId("5f9f1b1b1b1b1b1b1b13b1b1b"),
+// 			"approved" : true,
+// 			"comment" : "ok"
+// 		},	
+// }
+
+// {
+// 	"_id" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"artistId" : ObjectId("5f9f1b1b1b1b1b1b1b1b1b1b"),
+// 	"approvals" : 
+// 		{
+// 			"userId" : ObjectId("5f9f1b1b1b1b1b1b1b13b1b1b"),
+// 			"approved" : true,
+// 			"comment" : "ok"
+// 		},	
+// }
+
+
 export class ModelService {
 	static getModels = async (slug: string): Promise<IModel[] | false> => {
 		try {
