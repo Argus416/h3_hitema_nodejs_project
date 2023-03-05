@@ -10,9 +10,13 @@ class User {
 
 	createUser = async (req: Request, res: Response) => {
 		try {
+			if (req.body.role === Role.admin) {
+				res.status(StatusCodes.METHOD_NOT_ALLOWED).send("You can't have multiple admin");
+				return;
+			}
+
 			const user = new MUser({ ...req.body });
 			await user.save();
-
 			res.json({ data: user });
 		} catch (err) {
 			console.error(`Error creating user ${err}`);
@@ -70,34 +74,38 @@ class User {
 		}
 	};
 
+	createArtist = async (req: Request, res: Response) => {
+		try {
+			const user = new MUser({ ...req.body, role: Role.artist });
 
-    createArtist = async (req: Request, res: Response) => {
-        try{
+			await user.save();
 
-            const user = new MUser({...req.body, role:Role.artist})
-
-            await user.save()
-
-
-            res.json({data: user});
-        }catch(err){
-            console.error(`Error creating user ${err}`)
-            res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`)
-
-        }
-    }
+			res.json({ data: user });
+		} catch (err) {
+			console.error(`Error creating user ${err}`);
+			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
+		}
+	};
 
 	banUser = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			const user = await MUser.updateOne(
+
+			const user = await MUser.findById(id);
+
+			if (user?.role !== Role.artist) {
+				res.status(StatusCodes.METHOD_NOT_ALLOWED).send(`User is not an artist`);
+				return;
+			}
+
+			const userAfterUpdate = await MUser.updateOne(
 				{ _id: id },
 				{
 					banned: true,
 				}
 			);
 
-			res.json(user);
+			res.status(StatusCodes.OK).json({ data: userAfterUpdate });
 		} catch (err) {
 			console.error(`Error updating user ${err}`);
 			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);
