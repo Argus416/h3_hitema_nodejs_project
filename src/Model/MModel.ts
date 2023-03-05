@@ -7,7 +7,7 @@ export interface Approvals {
 }
 
 export interface IModel {
-	id?: string;
+	_id?: string;
 	title: string;
 	name: string;
 	slug: string;
