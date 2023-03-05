@@ -1,4 +1,4 @@
-import { isManger, isConnected, isArtist } from '../middleware/checkAuth';
+import {isManager, isConnected, isArtist, uniqueAdmin} from '../middleware/checkAuth';
 import { isAdmin } from '../middleware/checkAuth';
 import express from "express";
 import User from "../Controller/User";
@@ -11,13 +11,14 @@ const router = express.Router();
 
 
 router.post("/login" , Auth.login);
-// router.post("/register" , Auth.login);
+router.post("/register" , User.createArtist);
 
 router.patch("/logout", Auth.logout);
 
 router.get("/users", User.getAllUsers);
-router.post("/user/new",isAdmin, User.createUser);
+router.post("/user/new", isAdmin, uniqueAdmin, User.createUser);
 router.delete("/user/:id", User.deleteUser);
 router.patch("/user/:id", User.updateUser);
 
+router.post('/model', isArtist, Model.createModel)
 export default router;
