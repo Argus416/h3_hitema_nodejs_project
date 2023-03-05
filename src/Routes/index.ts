@@ -9,12 +9,12 @@ import Auth from "../controller/Auth";
 const router = express.Router();
 
 router.post("/login", Auth.login);
-router.post("/register", User.createArtist);
+router.post("/register/artist", User.createArtist);
+router.post("/register/manager", isAdmin, User.createManager);
 
 router.patch("/logout", Auth.logout);
 
 router.get("/users", User.getAllUsers);
-router.post("/user/new", isAdmin, User.createUser);
 router.get("/user/banned/:id", isAdmin, User.banUser);
 router.patch("/user/:id", User.updateUser);
 router.delete("/user/:id", isAdmin, User.deleteUser);
@@ -22,6 +22,7 @@ router.delete("/user/:id", isAdmin, User.deleteUser);
 router.get("/models", Model.getModels);
 router.get("/model/:slug", Model.getModel);
 router.post("/model/new", isNotAdmin, Model.createModel);
-router.patch("/model/approve/:idModel", isManager, Model.addApproval);
+router.patch("/model/approve/add/:idModel", isManager, Model.addApproval);
+router.delete("/model/approve/remove/:idModel", isManager, Model.removeApproval);
 
 export default router;

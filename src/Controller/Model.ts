@@ -174,10 +174,43 @@ class Model {
 				}
 			);
 
-			res.json(model);
+			res.status(StatusCodes.OK).send("Model approved successfully");
 		} catch (err) {
 			console.error(`Error approving model ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error approving model ${err}`);
+		}
+	};
+
+	removeApproval = async (req: Request, res: Response) => {
+		try {
+			const { idModel } = req.params;
+
+			const isApproved = await MModel.findOne({
+				_id: idModel,
+				"approvals.userId": { $in: Auth.currentUser._id },
+			});
+
+			if (isApproved) {
+				const model = await MModel.updateOne(
+					{
+						_id: idModel,
+					},
+					{
+						$pull: {
+							approvals: {
+								userId: Auth.currentUser._id,
+							},
+						},
+					}
+				);
+				res.send("Approval removed successfully");
+				return;
+			}
+
+			res.json("Error, no approval found to remove");
+		} catch (err) {
+			console.error(`Error approving model ${err}`);
+			res.status(StatusCodes.UNAUTHORIZED).send(`Error removing model ${err}`);
 		}
 	};
 }

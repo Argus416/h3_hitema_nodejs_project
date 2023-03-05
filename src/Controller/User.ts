@@ -6,22 +6,6 @@ import { StatusCodes } from "http-status-codes";
 class User {
 	users: Array<any> = [];
 
-	createUser = async (req: Request, res: Response) => {
-		try {
-			if (req.body.role === Role.admin) {
-				res.status(StatusCodes.METHOD_NOT_ALLOWED).send("You can't have multiple admin");
-				return;
-			}
-
-			const user = new MUser({ ...req.body });
-			await user.save();
-			res.json({ data: user });
-		} catch (err) {
-			console.error(`Error creating user ${err}`);
-			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
-		}
-	};
-
 	/*
         On retourne la liste des utilisateurs (this.users)
      */
@@ -75,6 +59,22 @@ class User {
 	createArtist = async (req: Request, res: Response) => {
 		try {
 			const user = new MUser({ ...req.body, role: Role.artist });
+
+			await user.save();
+
+			const response = _.cloneDeep(req.body);
+			delete response.password;
+
+			res.json({ data: response });
+		} catch (err) {
+			console.error(`Error creating user ${err}`);
+			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
+		}
+	};
+
+	createManager = async (req: Request, res: Response) => {
+		try {
+			const user = new MUser({ ...req.body, role: Role.manager });
 
 			await user.save();
 
