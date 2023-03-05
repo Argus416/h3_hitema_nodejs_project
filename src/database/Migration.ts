@@ -1,7 +1,7 @@
-import { Role } from "./../Model/MUser";
-import User from "../Controller/User";
+import { Role } from "../model/MUser";
+import User from "../controller/User";
 import { Request, Response } from "express";
-import MUser from "../Model/MUser";
+import MUser from "../model/MUser";
 
 class Migration {
 	private createUsersOnFirstRun = async () => {

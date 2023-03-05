@@ -1,9 +1,9 @@
 import { isManager, isConnected, isArtist, uniqueAdmin, isNotAdmin } from "../middleware/checkAuth";
 import { isAdmin } from "../middleware/checkAuth";
 import express from "express";
-import User from "../Controller/User";
-import Model from "../Controller/Model";
-import Auth from "../Controller/Auth";
+import User from "../controller/User";
+import Model from "../controller/Model";
+import Auth from "../controller/Auth";
 // import authenticate from '../middleware/authenticate';
 
 const router = express.Router();

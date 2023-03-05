@@ -1,7 +1,6 @@
 import { createUsername } from '../helpers/formater';
 import {Request, Response} from 'express';
-import MUser, {IUser, Role} from "../Model/MUser";
-import Auth from "./Auth";
+import MUser, { IUser, Role } from "../model/MUser";
 import _ from "lodash"
 import { StatusCodes } from 'http-status-codes';
 

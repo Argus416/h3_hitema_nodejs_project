@@ -1,10 +1,10 @@
 import {Request, Response} from 'express';
 import _ from "lodash"
-import MModel, { IModel } from "../Model/MModel";
+import MModel, { IModel } from "../model/MModel";
 
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Auth from "./Auth";
-import { Role } from "../Model/MUser";
+import { Role } from "../model/MUser";
 
 class Model {
 	models: Array<IModel> = [];

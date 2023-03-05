@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import MUser, { IUser } from "../Model/MUser";
-import User from "./User";
+import MUser, { IUser } from "../model/MUser";
 import { JWT_SECRET } from "../config";
 
 import jwt from 'jsonwebtoken';

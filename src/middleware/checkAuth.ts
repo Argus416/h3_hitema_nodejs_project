@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
-import Auth from "../Controller/Auth"
-import { Role } from "../Model/MUser"
+import Auth from "../controller/Auth";
+import { Role } from "../model/MUser";
 import _ from "lodash"
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
 
