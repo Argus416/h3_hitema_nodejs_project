@@ -24,8 +24,8 @@ class Migration {
 		// const user_admin = User.createUser(req, res);
 	};
 
-	createCollections() {
-		this.createUsersOnFirstRun();
+	async createCollections() {
+		await this.createUsersOnFirstRun();
 	}
 }
 
