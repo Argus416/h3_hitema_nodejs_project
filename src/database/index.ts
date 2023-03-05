@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import { DATABASE } from '../config';
+import Migration from "./Migration";
 
-const connectDatabase = () =>{
-    mongoose
+const connectDatabase = () => {
+	mongoose
 		.connect(`mongodb://${DATABASE.HOST}:${DATABASE.PORT}/${DATABASE.NAME}`)
 		.then(() => {
 			console.log("Connected to MongoDB");
@@ -11,19 +12,21 @@ const connectDatabase = () =>{
 			console.error(err);
 		});
 
-    mongoose.connection.on("connected", () => {
+	const db = mongoose.connection;
+
+	db.once("connected", async () => {
+		await Migration.createCollections();
 		console.log("Mongoose connected to db...");
 	});
-    
-    mongoose.connection.on('error', err => {
-        console.log(err.message);
-    });
 
-    mongoose.connection.on('disconnected', () => {
-        console.log('Mongoose connection is disconnected...');
-    });
-    
-}
+	db.on("error", (err) => {
+		console.log(err.message);
+	});
+
+	db.on("disconnected", () => {
+		console.log("Mongoose connection is disconnected...");
+	});
+};
 
 
 export default connectDatabase
