@@ -1,4 +1,4 @@
-import { isManager, isConnected, isArtist, uniqueAdmin, isNotAdmin } from "../middleware/checkAuth";
+import { isManager, isConnected, isArtist, isNotAdmin } from "../middleware/checkAuth";
 import { isAdmin } from "../middleware/checkAuth";
 import express from "express";
 import User from "../controller/User";
