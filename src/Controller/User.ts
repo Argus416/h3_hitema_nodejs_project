@@ -1,9 +1,7 @@
-import { createUsername } from '../helpers/formater';
-import {Request, Response} from 'express';
-import MUser, { IUser, Role } from "../model/MUser";
-import _ from "lodash"
-import { StatusCodes } from 'http-status-codes';
-
+import { Request, Response } from "express";
+import MUser, { Role } from "../model/MUser";
+import _ from "lodash";
+import { StatusCodes } from "http-status-codes";
 
 class User {
 	users: Array<any> = [];
@@ -80,7 +78,10 @@ class User {
 
 			await user.save();
 
-			res.json({ data: user });
+			const response = _.cloneDeep(req.body);
+			delete response.password;
+
+			res.json({ data: response });
 		} catch (err) {
 			console.error(`Error creating user ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`);
