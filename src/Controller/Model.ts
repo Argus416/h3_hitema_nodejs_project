@@ -5,6 +5,7 @@ import MModel, { IModel } from "../model/MModel";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import Auth from "./Auth";
 import MUser, { Role } from "../model/MUser";
+import { ModelService } from "../services/Model";
 
 class Model {
 	models: Array<IModel> = [];
@@ -43,77 +44,16 @@ class Model {
 
 	getModel = async (req: Request, res: Response) => {
 		try {
-			let models = await MModel.aggregate([
-				{
-					$match: {
-						slug: req.params.slug,
-					},
-				},
-				{
-					$unwind: {
-						path: "$approvals",
-					},
-				},
-				{
-					$lookup: {
-						from: "users",
-						localField: "approvals.userId",
-						foreignField: "_id",
-						as: "all_users_approvals",
-					},
-				},
-				{
-					$unwind: {
-						path: "$all_users_approvals",
-					},
-				},
-				{
-					$lookup: {
-						from: "users",
-						localField: "artistId",
-						foreignField: "_id",
-						as: "artist",
-					},
-				},
-				{
-					$unwind: {
-						path: "$artist",
-					},
-				},
-				{
-					$group: {
-						_id: "$_id",
-						artistId: { $first: "$artistId" },
-						name: { $first: "$name" },
-						slug: { $first: "$slug" },
-						artist: {
-							$first: {
-								_id: "$artist._id",
-								username: "$artist.username",
-								firstname: "$artist.firstname",
-								lastname: "$artist.lastname",
-								role: "$artist.role",
-								createdAt: "$artist.createdAt",
-								updatedAt: "$artist.updatedAt",
-							},
-						},
-						approvals: {
-							$push: {
-								userId: "$all_users_approvals._id",
-								username: "$all_users_approvals.username",
-								firstname: "$all_users_approvals.firstname",
-								lastname: "$all_users_approvals.lastname",
-								approved: "$approvals.approved",
-								comment: "$approvals.comment",
-							},
-						},
-					},
-				},
-			]);
+			let model: IModel | IModel[] = (await ModelService.getModels(req.params.slug)) as IModel[];
+			model = model[0] as IModel;
 
-			const nbManager = await MUser.find({ role: Role.manager, banned: false }).countDocuments();
+			if (model) {
+				const modelIsValid = await ModelService.isModelValid(model._id as string);
 
-			res.json({ models: models, nbManager: nbManager });
+				res.json({ model });
+			} else {
+				res.status(StatusCodes.NOT_FOUND).send("Model not found");
+			}
 		} catch (err) {
 			console.error(`Error fetching models ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error fetching models ${err}`);
@@ -203,11 +143,10 @@ class Model {
 						},
 					}
 				);
-				res.send("Approval removed successfully");
-				return;
+				res.status(StatusCodes.OK).send("Approval removed successfully");
+			} else {
+				res.status(StatusCodes.NOT_FOUND).json("Error, no approval found to remove");
 			}
-
-			res.json("Error, no approval found to remove");
 		} catch (err) {
 			console.error(`Error approving model ${err}`);
 			res.status(StatusCodes.UNAUTHORIZED).send(`Error removing model ${err}`);
