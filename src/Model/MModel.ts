@@ -27,8 +27,12 @@ const ModelSchema = new Schema(
 		artistId: Schema.Types.ObjectId,
 		approvals: [
 			{
-				userId: Schema.Types.ObjectId,
+				userId: {
+					type: Schema.Types.ObjectId,
+					ref: "User",
+				},
 				approved: Boolean,
+				comment: String,
 				created_at: Date,
 			},
 		],

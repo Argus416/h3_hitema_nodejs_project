@@ -22,7 +22,6 @@ router.delete("/user/:id", isAdmin, User.deleteUser);
 router.get("/models", Model.getModels);
 router.get("/model/:slug", Model.getModel);
 router.post("/model/new", isNotAdmin, Model.createModel);
-
-router.post("/model/approve/:idModel", isManager, Model.addApproval);
+router.patch("/model/approve/:idModel", isManager, Model.addApproval);
 
 export default router;

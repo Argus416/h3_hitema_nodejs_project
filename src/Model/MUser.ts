@@ -1,13 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IUser   {
-    id ?: string,
-    email : string,
-    lastname: string,
-    firstname: string,
-    username : string,
-    password: string,
-    role: Role,
+export interface IUser {
+	id?: string;
+	email: string;
+	lastname: string;
+	firstname: string;
+	username: string;
+	password?: string;
+	role: Role;
 }
 
 export enum Role {

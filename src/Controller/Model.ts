@@ -104,6 +104,7 @@ class Model {
 								firstname: "$all_users_approvals.firstname",
 								lastname: "$all_users_approvals.lastname",
 								approved: "$approvals.approved",
+								comment: "$approvals.comment",
 							},
 						},
 					},
@@ -161,11 +162,12 @@ class Model {
 			const model = await MModel.updateOne(
 				{
 					_id: idModel,
-					banned: false,
+					"approvals.userId": { $nin: Auth.currentUser._id },
 				},
 				{
 					$push: {
 						approvals: {
+							userId: Auth.currentUser._id,
 							...req.body,
 						},
 					},
