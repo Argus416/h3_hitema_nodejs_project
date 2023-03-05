@@ -7,9 +7,6 @@ import { hashPassword } from "../services/hashServices";
 class User {
 	users: Array<any> = [];
 
-	/*
-        On retourne la liste des utilisateurs (this.users)
-     */
 	getAllUsers = async (req: Request, res: Response) => {
 		try {
 			const users = await MUser.find();
@@ -20,9 +17,6 @@ class User {
 		}
 	};
 
-	/*
-       On supprime un utilisateur de la liste des utilisateurs (this.users) en fonction de son id
-     */
 	deleteUser = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
@@ -37,9 +31,6 @@ class User {
 		}
 	};
 
-	/*
-        On met à jour un utilisateur de la liste des utilisateurs (this.users) en fonction de son id
-     */
 	updateUser = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;

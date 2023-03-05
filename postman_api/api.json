@@ -1,0 +1,438 @@
+{
+	"info": {
+		"_postman_id": "7c76251b-c15d-4181-8a38-0bf693037e92",
+		"name": "H3 hitema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17347930"
+	},
+	"item": [
+		{
+			"name": "Projet Nodejs API",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"token\", jsonData.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\" : \"mohamad@localhost.com\",\n    \"password\" : \"123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"postman.setEnvironmentVariable(\"token\", '');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{url}}/logout",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get all",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create artiste",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\": \"mohamad\",\n    \"lastname\": \"alkhatib\",\n    \"email\": \"mohamad@localhost.com\",\n    \"username\": \"mohamad416\",\n    \"password\": \"123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/register/artist",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"register",
+										"artist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create manager",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\": \"manager5\",\n    \"lastname\": \"localhost\",\n    \"email\": \"manager5@localhost.com\",\n    \"username\": \"manager5\",\n    \"password\": \"123321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/register/manager",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"register",
+										"manager"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\" : \"toto\",\n    \"lastname\" : \"titi\",\n    \"role\" : \"client\",\n    \"username\": \"to123\",\n    \"password\" : \"ez\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/user/6400c14dc15f6e9778c534a8",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"user",
+										"6400c14dc15f6e9778c534a8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ban artist",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/user/banned/6404883a4cddac721704367c",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"user",
+										"banned",
+										"6404883a4cddac721704367c"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstname\" : \"Mohamad\",\n    \"lastname\" : \"Al Khatib\",\n    \"role\" : \"admin\",\n    \"username\": \"mk416\",\n    \"password\" : \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/user/6400bf4187ab0fc526e4296f",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"user",
+										"6400bf4187ab0fc526e4296f"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Models",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"String1\",\n    \"name\": \"String1\",\n    \"slug\": \"string_1_2\",\n    \"artistId\": \"64048cb3ec7cb9537330be0b\",\n    \"approvals\": [\n        {\n            \"userId\": \"64048b26ec7cb9537330bdee\",\n            \"approuved\": true,\n            \"created_at\": \"2023-03-05T12:34:14.243Z\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/model/new",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"model",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/models",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"models"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get model by slug",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/model/string_1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"model",
+										"string_1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Approve",
+					"item": [
+						{
+							"name": "Approve a model",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"approved\": false,\n    \"comment\": \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/model/approve/add/64048c56ec7cb9537330bdfe",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"model",
+										"approve",
+										"add",
+										"64048c56ec7cb9537330bdfe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove approval",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/model/approve/remove/64048c56ec7cb9537330bdfe",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"model",
+										"approve",
+										"remove",
+										"64048c56ec7cb9537330bdfe"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3001"
+		}
+	]
+}

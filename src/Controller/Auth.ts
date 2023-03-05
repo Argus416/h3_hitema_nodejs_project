@@ -2,7 +2,6 @@ import { comparePassword } from "./../services/hashServices";
 import { Request, Response } from "express";
 import MUser, { IUser } from "../model/MUser";
 import { JWT_SECRET } from "../config";
-
 import jwt from "jsonwebtoken";
 
 class Auth {
@@ -12,6 +11,7 @@ class Auth {
 		const user = (await MUser.findOne({
 			email,
 		})) as IUser;
+
 		const isSamePassword = await comparePassword(password, user.password as string);
 
 		if (user) {
