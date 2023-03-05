@@ -1,24 +1,28 @@
-import {isManager, isConnected, isArtist, uniqueAdmin} from '../middleware/checkAuth';
-import { isAdmin } from '../middleware/checkAuth';
+import { isManager, isConnected, isArtist, isNotAdmin } from "../middleware/checkAuth";
+import { isAdmin } from "../middleware/checkAuth";
 import express from "express";
-import User from "../Controller/User";
-import Model from "../Controller/Model";
-import Approval from "../Controller/Approval";
-import Auth from "../Controller/Auth";
+import User from "../controller/User";
+import Model from "../controller/Model";
+import Auth from "../controller/Auth";
 // import authenticate from '../middleware/authenticate';
 
 const router = express.Router();
 
-
-router.post("/login" , Auth.login);
-router.post("/register" , User.createArtist);
+router.post("/login", Auth.login);
+router.post("/register/artist", User.createArtist);
+router.post("/register/manager", isAdmin, User.createManager);
 
 router.patch("/logout", Auth.logout);
 
 router.get("/users", User.getAllUsers);
-router.post("/user/new", isAdmin, uniqueAdmin, User.createUser);
-router.delete("/user/:id", User.deleteUser);
+router.get("/user/banned/:id", isAdmin, User.banUser);
 router.patch("/user/:id", User.updateUser);
+router.delete("/user/:id", isAdmin, User.deleteUser);
 
-router.post('/model', isArtist, Model.createModel)
+router.get("/models", Model.getModels);
+router.get("/model/:slug", Model.getModel);
+router.post("/model/new", isNotAdmin, Model.createModel);
+router.patch("/model/approve/add/:idModel", isManager, Model.addApproval);
+router.delete("/model/approve/remove/:idModel", isManager, Model.removeApproval);
+
 export default router;

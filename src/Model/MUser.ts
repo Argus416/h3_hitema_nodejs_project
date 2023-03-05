@@ -1,13 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IUser   {
-    id ?: string,
-    email : string,
-    lastname: string,
-    firstname: string,
-    username : string,
-    password: string,
-    role: Role,
+export interface IUser {
+	_id?: string;
+	email: string;
+	lastname: string;
+	firstname: string;
+	username: string;
+	password?: string;
+	role: Role;
 }
 
 export enum Role {
@@ -18,7 +18,7 @@ export enum Role {
 
 // Admin can 
     // CRD all models
-    // ban artist
+    // banned artist
 
 // Manager can
     // read all models
@@ -28,18 +28,28 @@ export enum Role {
     // read for his own account, update all models
 
 
-const UserSchema = new Schema({
-    lastname: String,
-    firstname: String,
-    email : String,
-    username : {
-        type: String, 
-        unique: true
-    },
-    password: String,
-    role: String,
-}, {
-    timestamps: true,
-});
+const UserSchema = new Schema(
+	{
+		lastname: String,
+		firstname: String,
+		email: {
+			type: String,
+			unique: true,
+		},
+		username: {
+			type: String,
+			unique: true,
+		},
+		password: String,
+		role: String,
+		banned: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	{
+		timestamps: true,
+	}
+);
 
 export default mongoose.model<IUser>('User', UserSchema);

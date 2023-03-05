@@ -1,34 +1,33 @@
 import { Request, Response } from "express";
-import MUser, { IUser } from "../Model/MUser";
-import User from "./User";
+import MUser, { IUser } from "../model/MUser";
 import { JWT_SECRET } from "../config";
 
 import jwt from 'jsonwebtoken';
 
 
 
-class Auth{
+class Auth {
+	currentUser = {} as any;
 
-    currentUser = {} as any
+	public login = async (req: Request, res: Response) => {
+		const { email, password } = req.body;
+		this.currentUser = await MUser.findOne({
+			email,
+			password,
+		});
 
-        public login = async  (req: Request, res: Response) => {
-        const { username, password } = req.body
-        this.currentUser = await MUser.findOne({
-            username , password
-        })
-        
-        if(this.currentUser){
-            const token = jwt.sign({ id: this.currentUser.id }, JWT_SECRET, { expiresIn: '1h' });
-            res.json({text: "User connected", token})
-        }else{
-            res.json({text: "User not found"})
-        }
-    }
-    
-    public logout = (req: Request, res: Response) => {
-        this.currentUser = {} as IUser
-        res.json({text: "User disconnected"})
-    }
+		if (this.currentUser) {
+			const token = jwt.sign({ id: this.currentUser.id }, JWT_SECRET, { expiresIn: "1h" });
+			res.json({ text: "User connected", token });
+		} else {
+			res.json({ text: "User not found" });
+		}
+	};
+
+	public logout = (req: Request, res: Response) => {
+		this.currentUser = {} as IUser;
+		res.json({ text: "User disconnected" });
+	};
 }
 
 const auth = new Auth()
