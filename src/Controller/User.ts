@@ -1,6 +1,7 @@
 import { createUsername } from '../helpers/formater';
 import {Request, Response} from 'express';
 import MUser, {IUser, Role} from "../Model/MUser";
+import Auth from "./Auth";
 import _ from "lodash"
 import { StatusCodes } from 'http-status-codes';
 
@@ -69,6 +70,23 @@ class User {
 			res.status(StatusCodes.NOT_FOUND).send(`User not found ${err}`);
 		}
 	};
+
+
+    createArtist = async (req: Request, res: Response) => {
+        try{
+
+            const user = new MUser({...req.body, role:Role.artist})
+
+            await user.save()
+
+
+            res.json({data: user});
+        }catch(err){
+            console.error(`Error creating user ${err}`)
+            res.status(StatusCodes.UNAUTHORIZED).send(`Error creating user ${err}`)
+
+        }
+    }
 
 	banUser = async (req: Request, res: Response) => {
 		try {
