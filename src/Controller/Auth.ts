@@ -7,14 +7,14 @@ import jwt from "jsonwebtoken";
 class Auth {
 	public login = async (req: Request, res: Response) => {
 		const { email, password } = req.body;
+		console.log(req.body);
 
 		const user = (await MUser.findOne({
 			email,
 		})) as IUser;
 
-		const isSamePassword = await comparePassword(password, user.password as string);
-
 		if (user) {
+			const isSamePassword = await comparePassword(password, user?.password as string);
 			if (isSamePassword) {
 				const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: "1h" });
 				res.cookie("token", token);

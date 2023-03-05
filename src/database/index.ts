@@ -15,8 +15,8 @@ const connectDatabase = () => {
 	const db = mongoose.connection;
 
 	db.once("connected", async () => {
-		await Migration.createCollections();
 		console.log("Mongoose connected to db...");
+		await Migration.createCollections();
 	});
 
 	db.on("error", (err) => {
