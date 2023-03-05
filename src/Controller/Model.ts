@@ -50,7 +50,7 @@ class Model {
 			if (model) {
 				const modelIsValid = await ModelService.isModelValid(model._id as string);
 
-				res.json({ model });
+				res.json({ model, modelIsValid });
 			} else {
 				res.status(StatusCodes.NOT_FOUND).send("Model not found");
 			}

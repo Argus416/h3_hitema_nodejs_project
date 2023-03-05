@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import MUser, { Role } from "../model/MUser";
 import _ from "lodash";
 import { StatusCodes } from "http-status-codes";
+import { hashPassword } from "../services/hashServices";
 
 class User {
 	users: Array<any> = [];
@@ -42,6 +43,11 @@ class User {
 	updateUser = async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
+
+			if (!_.isEmpty(req.body.password)) {
+				req.body.password = await hashPassword(req.body.password);
+			}
+
 			const user = await MUser.updateOne(
 				{ _id: id },
 				{
@@ -58,7 +64,16 @@ class User {
 
 	createArtist = async (req: Request, res: Response) => {
 		try {
-			const user = new MUser({ ...req.body, role: Role.artist });
+			console.log({
+				password: req.body.password,
+				hashPassword: await hashPassword(req.body.password),
+			});
+
+			const user = new MUser({
+				...req.body,
+				password: await hashPassword(req.body.password),
+				role: Role.artist,
+			});
 
 			await user.save();
 
@@ -74,8 +89,11 @@ class User {
 
 	createManager = async (req: Request, res: Response) => {
 		try {
-			const user = new MUser({ ...req.body, role: Role.manager });
-
+			const user = new MUser({
+				...req.body,
+				password: await hashPassword(req.body.password),
+				role: Role.manager,
+			});
 			await user.save();
 
 			const response = _.cloneDeep(req.body);

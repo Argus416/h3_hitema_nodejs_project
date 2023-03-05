@@ -12,4 +12,4 @@ export default jwt({
 		}
 		return null;
 	},
-}).unless({ path: ["/login", "/register"] });
+}).unless({ path: ["/login", "/register/artist"] });

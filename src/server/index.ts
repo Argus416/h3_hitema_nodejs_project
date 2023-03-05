@@ -9,8 +9,6 @@ app.use(express.json());
 app.use(authenticate);
 
 
-
-
 app.use('/', Routes);
 
 export default app 
