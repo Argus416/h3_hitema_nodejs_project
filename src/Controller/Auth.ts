@@ -6,19 +6,18 @@ import { JWT_SECRET } from "../config";
 import jwt from "jsonwebtoken";
 
 class Auth {
-	currentUser = {} as any;
-
 	public login = async (req: Request, res: Response) => {
 		const { email, password } = req.body;
 
-		this.currentUser = await MUser.findOne({
+		const user = (await MUser.findOne({
 			email,
-		});
-		const isSamePassword = await comparePassword(password, this.currentUser.password);
+		})) as IUser;
+		const isSamePassword = await comparePassword(password, user.password as string);
 
-		if (this.currentUser) {
+		if (user) {
 			if (isSamePassword) {
-				const token = jwt.sign({ id: this.currentUser.id }, JWT_SECRET, { expiresIn: "1h" });
+				const token = jwt.sign({ user }, JWT_SECRET, { expiresIn: "1h" });
+				res.cookie("token", token);
 				res.json({ text: "User connected", token });
 			} else {
 				res.json({ text: "Wrong password" });
@@ -29,7 +28,7 @@ class Auth {
 	};
 
 	public logout = (req: Request, res: Response) => {
-		this.currentUser = {} as IUser;
+		(req as any).user = {} as IUser;
 		res.json({ text: "User disconnected" });
 	};
 }

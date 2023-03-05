@@ -25,15 +25,17 @@ class Model {
 		try {
 			let models: IModel[] = [];
 
-			if (Auth.currentUser?.role === Role.admin || Auth.currentUser?.role === Role.manager) {
+			if ((req as any).auth.user?.role === Role.admin || (req as any).auth.user?.role === Role.manager) {
 				models = await MModel.find();
 			}
 
-			if (Auth.currentUser?.role === Role.artist) {
+			if ((req as any).auth.user?.role === Role.artist) {
 				models = await MModel.find({
-					artistId: Auth.currentUser._id,
+					artistId: (req as any).auth.user._id,
 				});
 			}
+
+			console.log((req as any).auth.user);
 
 			res.json({ data: models });
 		} catch (err) {
@@ -80,7 +82,7 @@ class Model {
 			const model = await MModel.updateOne(
 				{
 					_id: id,
-					artistId: Auth.currentUser._id,
+					artistId: (req as any).auth.user._id,
 					banned: false,
 				},
 				{
@@ -102,12 +104,12 @@ class Model {
 			const model = await MModel.updateOne(
 				{
 					_id: idModel,
-					"approvals.userId": { $nin: Auth.currentUser._id },
+					"approvals.userId": { $nin: (req as any).auth.user._id },
 				},
 				{
 					$push: {
 						approvals: {
-							userId: Auth.currentUser._id,
+							userId: (req as any).auth.user._id,
 							...req.body,
 						},
 					},
@@ -127,7 +129,7 @@ class Model {
 
 			const isApproved = await MModel.findOne({
 				_id: idModel,
-				"approvals.userId": { $in: Auth.currentUser._id },
+				"approvals.userId": { $in: (req as any).auth.user._id },
 			});
 
 			if (isApproved) {
@@ -138,7 +140,7 @@ class Model {
 					{
 						$pull: {
 							approvals: {
-								userId: Auth.currentUser._id,
+								userId: (req as any).auth.user._id,
 							},
 						},
 					}
