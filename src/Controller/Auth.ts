@@ -10,9 +10,9 @@ class Auth {
 	currentUser = {} as any;
 
 	public login = async (req: Request, res: Response) => {
-		const { lastname, password } = req.body;
+		const { email, password } = req.body;
 		this.currentUser = await MUser.findOne({
-			lastname,
+			email,
 			password,
 		});
 
